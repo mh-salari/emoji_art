@@ -54,7 +54,7 @@ def make_model(num_classes):
     return model
 
 
-def train_loop(model, num_epochs, optimizer, loss_fn, dataloader, dataset_size):
+def train_loop(model, num_epochs, optimizer, loss_fn, dataloader, dataset_size, device):
     model.train()
     print(f"Training the model for {num_epochs} epochs")
     for epoch in tqdm(range(1, num_epochs + 1)):  # loop over the dataset multiple times
@@ -86,6 +86,7 @@ def train_loop(model, num_epochs, optimizer, loss_fn, dataloader, dataset_size):
 
     print("Finished Training")
     return model
+
 
 if __name__ == "__main__":
     emojis_size = 10
@@ -122,9 +123,11 @@ if __name__ == "__main__":
         loss_fn=loss_fn,
         dataloader=dataloader,
         dataset_size=len(dataset),
+        device=device,
     )
 
-    torch.save(trained_model.state_dict(), data_path/f"model_{emojis_size}{emojis_size}.pt")
+    torch.save(
+        trained_model.state_dict(), data_path / f"model_{emojis_size}{emojis_size}.pt"
+    )
     with open(data_path / "class_to_idx.json", "w") as outfile:
         json.dump(dataset.class_to_idx, outfile)
-    
